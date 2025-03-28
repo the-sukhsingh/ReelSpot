@@ -27,7 +27,7 @@ export default function Header() {
                         className="btn btn-ghost text-xl gap-2 normal-case font-bold"
                         prefetch={true}
                         onClick={() =>
-                            showNotification("Welcome to ImageKit ReelsPro", "info")
+                            showNotification("Welcome to ReelSpot.", "info")
                         }
                     >
                         ReelSpot
@@ -45,7 +45,7 @@ export default function Header() {
                             </div>
                             <ul
                                 tabIndex={0}
-                                className="dropdown-content z-[1] shadow-lg bg-base-100 rounded-box w-64 mt-2 py-2"
+                                className="dropdown-content z-[1] shadow-lg bg-base-100 rounded-box w-64 mt-2 py-2 px-4"
                             >
                                 {session ? (
                                     <>
@@ -59,7 +59,7 @@ export default function Header() {
                                         <li>
                                             <Link
                                                 href="/upload"
-                                                className="px-4 py-2 hover:bg-base-200 block w-full"
+                                                className="px-4 py-2 hover:bg-base-200 block w-full rounded-md"
                                                 onClick={() =>
                                                     showNotification("Welcome to Admin Dashboard", "info")
                                                 }
@@ -71,7 +71,7 @@ export default function Header() {
                                         <li>
                                             <button
                                                 onClick={handleSignOut}
-                                                className="px-4 py-2 text-error hover:bg-base-200 w-full text-left"
+                                                className="px-4 py-2 text-error hover:bg-base-200 w-full text-left cursor-pointer rounded-md"
                                             >
                                                 Sign Out
                                             </button>
@@ -81,7 +81,7 @@ export default function Header() {
                                     <li>
                                         <Link
                                             href="/login"
-                                            className="px-4 py-2 hover:bg-base-200 block w-full"
+                                            className="px-4 py-2 hover:bg-base-200 block rounded-md"
                                             onClick={() =>
                                                 showNotification("Please sign in to continue", "info")
                                             }

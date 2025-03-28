@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     await connectToDb();
-    const videos = await Video.find();
+    const videos = await Video.find().sort({ createdAt: -1 })
     if(!videos || videos.length === 0){
         return NextResponse.json({error: "No videos found"}, {status: 404});
     }

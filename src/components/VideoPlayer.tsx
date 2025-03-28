@@ -39,7 +39,9 @@ const VideoPlayer = ({ video, showVideoFalse, PlayNextVideo, PlayPrevVideo, next
                 const videoEl = containerRef.current.querySelector('video');
                 if (videoEl && videoRef.current !== videoEl) {
                     videoRef.current = videoEl;
+                    setVideoPlay()
                 }
+
             }
         }, 500);
 
@@ -73,6 +75,47 @@ const VideoPlayer = ({ video, showVideoFalse, PlayNextVideo, PlayPrevVideo, next
         }
 
     };
+
+    const setVideoPlay = () =>{
+        const videoElement = getVideoElement();
+        if (!videoElement) return;
+
+        videoElement.play().catch(err => console.error("Error playing video:", err));
+        setIsPlaying(true);
+        setShowControls(true);
+        if (controlsTimerRef.current) {
+            clearTimeout(controlsTimerRef.current);
+        }
+        controlsTimerRef.current = setTimeout(() => {
+            setShowControls(false);
+        }, 1200);
+    }
+
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "ArrowRight") {
+                PlayNextVideo();
+            }
+            else if (e.key === "ArrowLeft") {
+                PlayPrevVideo();
+            }
+            else if (e.code === "Space") {
+                e.preventDefault();
+                togglePlayPause();
+            }
+            else if(e.key === "m"){
+                const videoElement = getVideoElement();
+                if (!videoElement) return;
+
+                videoElement.muted = !isMuted;
+                setIsMuted(!isMuted);
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+        return () => document.removeEventListener("keydown", handleKeyDown);
+    }, [PlayNextVideo, PlayPrevVideo, togglePlayPause]);
 
     const toggleMute = (e: React.MouseEvent) => {
         e.stopPropagation(); // Prevent triggering play/pause
@@ -162,6 +205,7 @@ const VideoPlayer = ({ video, showVideoFalse, PlayNextVideo, PlayPrevVideo, next
         }
     };
 
+
     return (
         <div className="bg-base-100 shadow hover:shadow-lg transition-all duration-300 flex flex-col lg:flex-row justify-between gap-4 p-2 md:p-4 max-h-[90vh] max-w-7xl mx-auto overflow-y-auto rounded-xl">
 
@@ -211,14 +255,17 @@ const VideoPlayer = ({ video, showVideoFalse, PlayNextVideo, PlayPrevVideo, next
 
                         {/* Replay button for video end - IMPROVED */}
                         {videoEnd && (
+                            <div className='absolute top-0 left-0 w-full h-full flex justify-center items-center' onClick={handleReplay}>
+                                
                             <div
-                                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-70 rounded-full p-6 cursor-pointer hover:bg-opacity-90 transition-all z-20 animate-pulse"
-                                onClick={handleReplay}
-                            >
+                                className=" bg-black rounded-full p-6 cursor-pointer hover:bg-opacity-90 transition-all z-20 animate-pulse"
+                                
+                                >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="white" viewBox="0 0 16 16">
                                     <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z" />
                                     <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z" />
                                 </svg>
+                                </div>
                             </div>
                         )}
 
